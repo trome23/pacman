@@ -54,6 +54,8 @@ const createBoard = () => {
             squares[i].classList.add('pac-dot')
         } else if  (layout[i] === 1) {
             squares[i].classList.add('wall')
+        } else if  (layout[i] === 2) {
+            squares[i].classList.add('ghost-lair')
         } else if  (layout[i] === 3) {
             squares[i].classList.add('power-pellet')
         } 
@@ -65,27 +67,38 @@ createBoard()
 let pacmanCurrentIndex = 490
 squares[pacmanCurrentIndex].classList.add('pacman')
 
+
 const control = (e) => {
     squares[pacmanCurrentIndex].classList.remove('pacman')
     switch (e.key) {
         case 'ArrowDown':
-            if (!squares[pacmanCurrentIndex + width].classList.contains('wall') &&
+            if (!squares[pacmanCurrentIndex + width].classList.contains('ghost-lair') &&
+                !squares[pacmanCurrentIndex + width].classList.contains('wall') &&
                 pacmanCurrentIndex + width < width * width) pacmanCurrentIndex += width
+                console.log(squares[pacmanCurrentIndex])
             break
         case 'ArrowUp':
-            if (!squares[pacmanCurrentIndex - width].classList.contains('wall') &&
+            if (!squares[pacmanCurrentIndex - width].classList.contains('ghost-lair') &&
+                !squares[pacmanCurrentIndex - width].classList.contains('wall') &&
                 pacmanCurrentIndex - width >= 0) pacmanCurrentIndex -= width
             break
         case 'ArrowRight':
-            if (!squares[pacmanCurrentIndex + 1].classList.contains('wall') &&
+            if (!squares[pacmanCurrentIndex + 1].classList.contains('ghost-lair') &&
+                !squares[pacmanCurrentIndex + 1].classList.contains('wall') &&
                 pacmanCurrentIndex % width < width - 1) pacmanCurrentIndex += 1
+                if(pacmanCurrentIndex === 391) {
+                    pacmanCurrentIndex = 364
+                }
+                console.log(squares[pacmanCurrentIndex])
             break
         case 'ArrowLeft':
-            if (!squares[pacmanCurrentIndex - 1].classList.contains('wall') &&
+            if (!squares[pacmanCurrentIndex - 1].classList.contains('ghost-lair') &&
+                !squares[pacmanCurrentIndex - 1].classList.contains('wall') &&
                 pacmanCurrentIndex % width !== 0) pacmanCurrentIndex -= 1
-            break
-
-        default:
+                if(pacmanCurrentIndex === 364) {
+                    pacmanCurrentIndex = 391
+                }
+                console.log(squares[pacmanCurrentIndex])
             break
     }
     squares[pacmanCurrentIndex].classList.add('pacman')
