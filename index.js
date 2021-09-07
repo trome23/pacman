@@ -2,6 +2,7 @@ const width = 28
 const grid = document.querySelector(".grid")
 const scoreDisplay = document.querySelector("#score")
 let squares = []
+let score = 0
 
 
 //28 * 28 = 784
@@ -75,7 +76,6 @@ const control = (e) => {
             if (!squares[pacmanCurrentIndex + width].classList.contains('ghost-lair') &&
                 !squares[pacmanCurrentIndex + width].classList.contains('wall') &&
                 pacmanCurrentIndex + width < width * width) pacmanCurrentIndex += width
-                console.log(squares[pacmanCurrentIndex])
             break
         case 'ArrowUp':
             if (!squares[pacmanCurrentIndex - width].classList.contains('ghost-lair') &&
@@ -88,8 +88,7 @@ const control = (e) => {
                 pacmanCurrentIndex % width < width - 1) pacmanCurrentIndex += 1
                 if(pacmanCurrentIndex === 391) {
                     pacmanCurrentIndex = 364
-                }
-                console.log(squares[pacmanCurrentIndex])
+                }     
             break
         case 'ArrowLeft':
             if (!squares[pacmanCurrentIndex - 1].classList.contains('ghost-lair') &&
@@ -97,11 +96,26 @@ const control = (e) => {
                 pacmanCurrentIndex % width !== 0) pacmanCurrentIndex -= 1
                 if(pacmanCurrentIndex === 364) {
                     pacmanCurrentIndex = 391
-                }
-                console.log(squares[pacmanCurrentIndex])
+                }    
             break
     }
     squares[pacmanCurrentIndex].classList.add('pacman')
+    eatPacDot()
+    // eatPowerPellet()
 }
 
 document.addEventListener('keyup', control)
+
+const eatPacDot = () => {
+    if (squares[pacmanCurrentIndex].classList.contains('pac-dot')) {
+        squares[pacmanCurrentIndex].classList.remove('pac-dot')
+        score++
+        scoreDisplay.innerHTML = score
+    }
+}
+
+// const eatPowerPellet = () => {
+//     if (squares[pacmanCurrentIndex].classList.contains('power-pellet')) {
+//         squares[pacmanCurrentIndex].classList.remove('power-pellet')
+//     }
+// }
