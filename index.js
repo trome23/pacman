@@ -119,3 +119,20 @@ const eatPacDot = () => {
 //         squares[pacmanCurrentIndex].classList.remove('power-pellet')
 //     }
 // }
+
+class Ghost {
+    constructor(className, startIndex, speed) {
+        this.className = className
+        this.startIndex = startIndex
+        this.speed = speed
+    }
+}
+
+let ghosts = [
+    new Ghost("Todd", 348, 250),
+    new Ghost("Jerry", 376, 300),
+    new Ghost("Hank", 351, 400),
+    new Ghost("Reggie", 379, 500)
+]
+
+ghosts.forEach(ghost => squares[ghost.startIndex].classList.add(ghost.className))

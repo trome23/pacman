@@ -36,3 +36,23 @@ html, body {
     border-radius: 7.5px;
     border: none;
 }
+
+.Todd {
+    background-color: blueviolet;
+    border: none;
+}
+
+.Jerry {
+    background-color: rgb(50, 214, 50);
+    border: none;
+}
+
+.Hank {
+    background-color: rgb(226, 110, 43);
+    border: none;
+}
+
+.Reggie {
+    background-color: rgb(226, 43, 150);
+    border: none;
+}
