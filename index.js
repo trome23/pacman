@@ -125,14 +125,43 @@ class Ghost {
         this.className = className
         this.startIndex = startIndex
         this.speed = speed
+        this.currentIndex = startIndex
+        this.isScared = false
+        this.timerId = NaN
     }
 }
 
-let ghosts = [
+const ghosts = [
     new Ghost("Todd", 348, 250),
     new Ghost("Jerry", 376, 300),
     new Ghost("Hank", 351, 400),
     new Ghost("Reggie", 379, 500)
 ]
 
-ghosts.forEach(ghost => squares[ghost.startIndex].classList.add(ghost.className))
+ghosts.forEach(ghost => {
+    squares[ghost.startIndex].classList.add(ghost.className)
+    squares[ghost.startIndex].classList.add('ghost')
+})
+
+let moveGhost = (ghost) => {
+    console.log('moved ghost')
+    const directions = [-1, +1, -width, +width]
+    let direction = directions[Math.floor(Math.random() * directions.length)]
+    console.log(direction);
+
+    ghost.timerId = setInterval(() => {
+        if (
+            !squares[ghost.currentIndex + direction].classList.contains('wall') &&
+            !squares[ghost.currentIndex + direction].classList.contains('ghost')
+            ) {
+            squares[ghost.currentIndex].classList.remove(ghost.className)
+            squares[ghost.currentIndex].classList.remove('ghost')
+            ghost.currentIndex += direction
+            squares[ghost.currentIndex].classList.add(ghost.className)
+            squares[ghost.currentIndex].classList.add('ghost')
+        } else direction = directions[Math.floor(Math.random() * directions.length)]
+    }, ghost.speed);
+    
+}
+
+ghosts.forEach(ghost => moveGhost(ghost))
