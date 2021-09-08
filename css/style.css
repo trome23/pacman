@@ -8,7 +8,7 @@ html, body {
     flex-wrap: wrap;
     width: 420px;
     height: 420px;
-    border: black solid 2px;
+    border: rgba(0, 0, 0, 0.925) solid 2px;
 }
 
 .grid div {
@@ -23,7 +23,7 @@ html, body {
 }
 
 .wall {
-    background-color: blue;
+    background-color:rgb(192, 193, 255);
 }
 
 .power-pellet {
@@ -54,5 +54,10 @@ html, body {
 
 .Reggie {
     background-color: rgb(226, 43, 150);
+    border: none;
+}
+
+.scared-ghost {
+    background-color: aqua;
     border: none;
 }

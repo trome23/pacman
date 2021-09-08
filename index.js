@@ -23,7 +23,7 @@ const layout = [
     1,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,1,
     1,1,1,1,1,1,0,1,1,1,1,1,0,1,1,0,1,1,1,1,1,0,1,1,1,1,1,1,
     1,1,1,1,1,1,0,1,1,4,4,4,4,4,4,4,4,4,4,1,1,0,1,1,1,1,1,1,
-    1,1,1,1,1,1,0,1,1,4,1,1,1,2,2,1,1,1,4,1,1,0,1,1,1,1,1,1,
+    1,1,1,1,1,1,0,1,1,4,1,1,2,2,2,2,1,1,4,1,1,0,1,1,1,1,1,1,
     1,1,1,1,1,1,0,1,1,4,1,2,2,2,2,2,2,1,4,1,1,0,1,1,1,1,1,1,
     4,4,4,4,4,4,0,0,0,4,1,2,2,2,2,2,2,1,4,0,0,0,4,4,4,4,4,4,
     1,1,1,1,1,1,0,1,1,4,1,2,2,2,2,2,2,1,4,1,1,0,1,1,1,1,1,1,
@@ -68,7 +68,6 @@ createBoard()
 let pacmanCurrentIndex = 490
 squares[pacmanCurrentIndex].classList.add('pacman')
 
-
 const control = (e) => {
     squares[pacmanCurrentIndex].classList.remove('pacman')
     switch (e.key) {
@@ -101,9 +100,8 @@ const control = (e) => {
     }
     squares[pacmanCurrentIndex].classList.add('pacman')
     eatPacDot()
-    // eatPowerPellet()
+    eatPowerPellet()
 }
-
 document.addEventListener('keyup', control)
 
 const eatPacDot = () => {
@@ -114,11 +112,19 @@ const eatPacDot = () => {
     }
 }
 
-// const eatPowerPellet = () => {
-//     if (squares[pacmanCurrentIndex].classList.contains('power-pellet')) {
-//         squares[pacmanCurrentIndex].classList.remove('power-pellet')
-//     }
-// }
+const eatPowerPellet = () => {
+    if (squares[pacmanCurrentIndex].classList.contains('power-pellet')) {
+        squares[pacmanCurrentIndex].classList.remove('power-pellet')
+        score += 10
+        scoreDisplay.innerHTML = score
+        ghosts.forEach(ghost => ghost.isScared = true)
+        setTimeout(unScareGhost, 10000);
+    }
+}
+
+let unScareGhost = () => {
+    ghosts.forEach(ghost => ghost.isScared = false)
+}
 
 class Ghost {
     constructor(className, startIndex, speed) {
@@ -144,10 +150,8 @@ ghosts.forEach(ghost => {
 })
 
 let moveGhost = (ghost) => {
-    console.log('moved ghost')
     const directions = [-1, +1, -width, +width]
     let direction = directions[Math.floor(Math.random() * directions.length)]
-    console.log(direction);
 
     ghost.timerId = setInterval(() => {
         if (
@@ -155,13 +159,35 @@ let moveGhost = (ghost) => {
             !squares[ghost.currentIndex + direction].classList.contains('ghost')
             ) {
             squares[ghost.currentIndex].classList.remove(ghost.className)
-            squares[ghost.currentIndex].classList.remove('ghost')
+            squares[ghost.currentIndex].classList.remove('ghost', 'scared-ghost')
             ghost.currentIndex += direction
             squares[ghost.currentIndex].classList.add(ghost.className)
             squares[ghost.currentIndex].classList.add('ghost')
         } else direction = directions[Math.floor(Math.random() * directions.length)]
+
+        if (ghost.isScared) {
+            squares[ghost.currentIndex].classList.add('scared-ghost')
+        }
+
+        if(ghost.isScared && squares[ghost.currentIndex].classList.contains('pacman')) {
+            squares[ghost.currentIndex].classList.remove(ghost.className, 'ghost', 'scared-ghost')
+            ghost.currentIndex = ghost.startIndex
+            score += 50
+            scoreDisplay.innerHTML = score
+            squares[ghost.currentIndex].classList.add(ghost.className, 'ghost')
+        }
+        gameOverCheck()
     }, ghost.speed);
     
 }
 
 ghosts.forEach(ghost => moveGhost(ghost))
+
+let gameOverCheck = () => {
+    if (squares[pacmanCurrentIndex].classList.contains('ghost') && 
+    !squares[pacmanCurrentIndex].classList.contains('scared-ghost')) {
+        ghosts.forEach(ghost=> clearInterval(ghost.timerId))
+        document.removeEventListener('keyup', control)
+        scoreDisplay.innerHTML = 'GAME OVER'
+    }
+}
